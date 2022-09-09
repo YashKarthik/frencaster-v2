@@ -1,34 +1,21 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Frencaster
 
-## Getting Started
+Create your own [Farcaster](https://farcaster.xyz) interaction circle. *Inspired by [Chirpty](https://chirpty.com/)*. Friendcaster generates an image that shows you the users you interact with most on Farcaster.
 
-First, run the development server:
+- Repo contains the v2 of [Friendcaster](https://github.com/yashkarthik/friendcaster)
 
-```bash
-npm run dev
-# or
-yarn dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+#### What counts as interaction?
+- Currently only replies are considered.
+- I'm actively working to include other stuff (likes, recasts etc)
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+# v2
+- [ ] Consider other interactions in the calculation.
+- [ ] Build a full-fledged frontend Next.js. And offload image rendering here.
+- [ ] Use an outward spiral instead of multiple levels of circles.
+- [ ] Replace a static image gen via canvas with a dynamic animated thingy built via react
+- [ ] Allow users to customize stuff: bg, profile outline, size, num of spiral layers etc.
+- [ ] Hovering a profile should show who it is etc.
+- [ ] Integrate with farcasternews.xyz to show karma.
+- [ ] Mint as nft (on some layer2, probs optimism). Store image on Arweave/IPFS.
+- [ ] Serverless using /api
