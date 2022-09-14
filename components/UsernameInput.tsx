@@ -5,11 +5,13 @@
 import { useRouter, NextRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 
-interface IResponseBody {
-  username: string;
-  freq: number;
-  avatarUrl: string;
-}
+import {
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  Container,
+  Button
+} from '@chakra-ui/react'
 
 const submitUname = async (event: FormEvent<HTMLFormElement>, router: NextRouter) => {
 
@@ -20,7 +22,6 @@ const submitUname = async (event: FormEvent<HTMLFormElement>, router: NextRouter
 
   const res = await fetch(`/api/${name}`);
   const body  = await res.json()
-  console.log(body)
 
   router.push({
     pathname: '/frens',
@@ -33,32 +34,39 @@ export default function UsernameInput() {
   const [buttonText, setButtonText] = useState('Generate');
 
   return (
-    <form onSubmit={e => submitUname(e, router)}>
-      <div className='flex flex-col items-center'>
-        <div className="relative mt-1 rounded-sm border-2 border-black">
-          <div className="rounded-l-sm pointer-events-none absolute inset-y-0 left-0 flex items-center border-r-2 border-black">
-            <span className="px-3 text-violet-900 text-lg">@</span>
-          </div>
-          <input
-            type="text"
-            name="username"
-            id="username"
-            placeholder="yashkarthik"
-            className="block
-          w-full h-9
-          rounded-sm px-12
-          text-violet-900
-          placeholder:text-gray-500"
-          />
-        </div>
-        <button className="border-2 border-black rounded-sm
-          p-1 mt-3
-          text-lg
-          hover:text-violet-600 hover:border-violet-600"
-          onClick={e => setButtonText('Loading...')}
+    <form onSubmit={e => {
+      submitUname(e, router)
+      setButtonText('Loading...')
+    }}>
+      <Container maxW='40ch' textAlign='center' pt='10'>
+        <InputGroup
+          border="solid black 1px"
+          borderRadius='sm'
         >
-          {buttonText}</button>
-      </div>
+          <InputLeftAddon children='@' borderRadius='sm' bg='white'/>
+          <Input
+            name='username'
+            type='text'
+            placeholder='yashkarthik'
+            borderRadius='sm'
+            bg='white'
+          />
+        </InputGroup>
+
+        <Button
+          border="solid black 2px"
+          borderRadius='sm'
+          bg='white'
+          p='1' mt='3'
+          fontSize='lg'
+          _hover={{
+            borderColor: 'purple.600',
+            textColor: 'purple.600'
+          }}
+        >
+          {buttonText}
+        </Button>
+      </Container>
     </form>
   )
 }

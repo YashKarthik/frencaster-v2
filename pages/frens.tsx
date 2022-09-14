@@ -4,6 +4,8 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { INameFreq } from './api/[username]';
 
+import { Box, Link as ChakraLink, Heading } from '@chakra-ui/react';
+
 const Frens: NextPage = () => {
   const router = useRouter()
   const { body } = router.query
@@ -11,7 +13,7 @@ const Frens: NextPage = () => {
   console.log(data);
 
   return (
-    <div className='w-screen h-screen'>
+    <Box h='90vh'>
       <Head>
         <title>Frencircle</title>
         <meta name="description" content="Visualize your Farcaster interaction circle!" />
@@ -19,13 +21,19 @@ const Frens: NextPage = () => {
       </Head>
 
       <Link href="/">
-        <a className="text-violet-700 pl-6">Home</a>
+        <ChakraLink pl='6' textColor='purple.600'>Home</ChakraLink>
       </Link>
 
-      <div className="pt-5 pb-20 text-center text-4xl font-bold hover:text-violet-600">
-        <h1>{data[0].username}'s frencircle</h1>
-      </div>
-    </div>
+      <Heading
+        pt='5' pb='20'
+        textAlign='center'
+        fontSize='4xl'
+        fontWeight='bold'
+        _hover={{textColor: "purple.600"}}
+      >
+        {data[0].username}'s frencircle
+      </Heading>
+    </Box>
   );
 }
 

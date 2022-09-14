@@ -2,23 +2,28 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import UsernameInput from "../components/UsernameInput";
 
+import { Heading, Box } from '@chakra-ui/react'
+
 const Home: NextPage = () => {
   return (
-    <div className='w-screen h-screen'>
+    <Box h='90vh'>
       <Head>
         <title>Frencircle</title>
         <meta name="description" content="Visualize your Farcaster interaction circle!" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="pt-10 pb-20 text-center text-4xl font-bold hover:text-violet-600">
-        <h1>Frencircle</h1>
-      </div>
+      <Heading
+        textAlign='center'
+        pt='20'
+        pb='10'
+        _hover={{textColor:'purple.500'}}
+      >
+        Frencircle
+      </Heading>
 
-      <div className="pt-10">
-        <UsernameInput />
-      </div>
-    </div>
+      <UsernameInput />
+    </Box>
   )
 }
 

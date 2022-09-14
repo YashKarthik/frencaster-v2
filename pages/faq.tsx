@@ -2,16 +2,25 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 
-const FaqElement = ({heading, text}) => (
-  <div className='p-4 ml-20'>
-    <h4 className="text-xl font-medium">{heading}</h4>
-    <p className='text-gray-600'>{text}</p>
-  </div>
+import { Box,
+         Heading,
+         Text,
+         Link as ChakraLink
+} from '@chakra-ui/react';
+
+import UserModal from '../components/ImgComponent';
+
+const FaqElement = ({heading, text}: any) => (
+  <Box p='4' ml='20'>
+    <Heading fontSize='xl' fontWeight='medium'>{heading}</Heading>
+    <Text textColor='gray.600'>{text}</Text>
+  </Box>
 );
 
 const Faq: NextPage = () => {
   return (
-    <div className='w-screen h-screen'>
+    <Box h='90vh'>
+
       <Head>
         <title>Frencircle</title>
         <meta name="description" content="FAQ about Frencircle" />
@@ -19,17 +28,23 @@ const Faq: NextPage = () => {
       </Head>
 
       <Link href="/">
-        <a className="text-violet-700 pl-6">Home</a>
+        <ChakraLink pl='6' textColor='purple.600'>Home</ChakraLink>
       </Link>
+
+      <UserModal
+        avatarUrl='https://lh3.googleusercontent.com/W_MM3NN-i9OYxM3XPJjwpb5mkMLjJFZJjnEXsvrhiTwirSFhRjyAa3qTzV63ago6NkX9qeesi20hoK9fHdhiE-SqICH0vPcTm3Dl'
+        freq={0}
+        username='yashkarthik'
+      />
 
       <main>
 
-        <div >
-          <h1 className="pt-10 pb-20 text-center text-4xl font-bold hover:text-violet-600">
+        <Box >
+          <Heading pt='10' pb='20' textAlign='center' fontSize='4xl' _hover={{textColor:'purple.500'}}>
             Frequently Asked Questions
-          </h1>
+          </Heading>
 
-          <div >
+          <Box >
             <FaqElement heading='What is Frencircle?' text="
             Friendcaster generates an image that displays the users you interact with the most on Farcaster
             "
@@ -54,11 +69,11 @@ const Faq: NextPage = () => {
             No, you do NOT need to login to your Farcaster account or give any permissions to use Friendcaster. Friendcascter only uses publicly available data.
             "
             />
-          </div>
+          </Box>
 
-        </div>
+        </Box>
       </main>
-    </div>
+    </Box>
   );
 }
 
