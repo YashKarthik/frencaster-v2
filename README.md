@@ -1,4 +1,4 @@
-# Frencaster
+# Frencircle
 
 Create your own [Farcaster](https://farcaster.xyz) interaction circle. *Inspired by [Chirpty](https://chirpty.com/)*. Friendcaster generates an image that shows you the users you interact with most on Farcaster.
 

@@ -54,7 +54,7 @@ const getInteractionFrequency = async (username: string, registryContract:any): 
     return prevValue[currentValue] ? ++prevValue[currentValue] : prevValue[currentValue] = 1, prevValue
   }, {});
 
-  // implement similar ^ thing for other interactions
+  // @todo implement similar ^ thing for other interactions
 
   const tally: INameFreq[] | any[] = []
   for (const [uname, freq] of Object.entries(interactionFrequency)) {
@@ -89,8 +89,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const registryContract = new Contract(REGISTRY_CONTRACT_ADDRESS, REGISTRY_ABI, provider);
 
   try {
-    const result = await getInteractionFrequency(username as string, registryContract)
-    res.status(200).send({ result })
+    const result = await getInteractionFrequency(username as string, registryContract);
+    const data = JSON.stringify(result);
+
+    res.status(200).json(data);
   } catch (err) {
     res.status(500).json({ error: 'failed to load data' })
   }
