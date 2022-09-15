@@ -5,10 +5,14 @@ import {
   PopoverHeader,
   PopoverBody,
   Image,
-  Box
+  Box,
+  Text,
+  Link as ChakraLink
 } from '@chakra-ui/react'
 
+import { useEffect, useState } from 'react';
 import { INameFreq } from '../pages/api/[username]';
+import { fetchProfile, fetchTopCast } from '../utils/metadata';
 
 const UserImage = ({avatarUrl}: {avatarUrl: string}) => {
   // using img cuz NextImage doesn't allow * domains, and I can't guess domains (not yet atleast)
@@ -26,7 +30,36 @@ const UserImage = ({avatarUrl}: {avatarUrl: string}) => {
   );
 }
 
+interface IMetadata {
+  bio           :string;
+  address       :string;
+  numFollowers  :number;
+  topCastText   :string;
+  topCastMerkleRoot   :string;
+}
+
 const UserModal = (props: INameFreq) => {
+
+  const [metadata, setMetadata] = useState<IMetadata>({bio: '', address: '', numFollowers: 0, topCastText: '', topCastMerkleRoot: ''});
+
+  useEffect(() => {
+    const getBio = async () => {
+      const { bio, address, numFollowers } = await fetchProfile(props.username);
+      const topCast = await fetchTopCast(props.username);
+
+      setMetadata({
+        bio: bio,
+        address: address,
+        numFollowers: numFollowers,
+        topCastText: topCast.text,
+        topCastMerkleRoot: topCast.merkleRoot
+      });
+    }
+
+    getBio();
+  }, [props]);
+
+
   return (
     <Popover trigger="hover">
       <PopoverTrigger>
@@ -35,19 +68,43 @@ const UserModal = (props: INameFreq) => {
         </Box>
       </PopoverTrigger>
       <PopoverContent
-        maxW={200}
+        minW={200}
         border="solid 2px"
         borderColor='black'
         borderRadius='sm'
       >
-        <PopoverHeader>
+        <PopoverHeader fontWeight='bold'>
           @{props.username}
+          <Box fontWeight="light">
+            Followers: {metadata.numFollowers}
+          </Box>
         </PopoverHeader>
         <PopoverBody>
-          <p>Bio</p>
-          <p>Top cast</p>
-          <p>Karma</p>
-          {/* Need to add other stuff like karma, bio, top tweet etc*/}
+          <Text p='1' borderBottom='dashed gray 1px'>{metadata.bio}</Text>
+
+          <Text p='1' borderBottom='dashed gray 1px'>
+            <Text fontWeight='bold'>
+              Top Cast:
+              {/* need to figure out how fc client does cast urls
+              <ChakraLink
+                fontWeight='light'
+                textColor='purple.500'
+                pt='1' href={`farcaster://casts/${metadata.topCastMerkleRoot}/${metadata.topCastMerkleRoot}`}
+              >
+                View in Farcaster
+              </ChakraLink>
+              */}
+            </Text>
+            {metadata.topCastText}
+          </Text>
+
+          <ChakraLink
+            textColor='purple.500'
+            pt='1'
+            href={`farcaster://profiles/${metadata.address}`}
+          >
+            View profile in Farcaster
+          </ChakraLink>
         </PopoverBody>
       </PopoverContent>
     </Popover>
@@ -55,3 +112,5 @@ const UserModal = (props: INameFreq) => {
 }
 
 export default UserModal;
+
+// farcaster://profiles/0x6eFe7a747E8d47E5fA2161Ff2591420830D618de/posts

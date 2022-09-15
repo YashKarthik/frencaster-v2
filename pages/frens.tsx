@@ -7,7 +7,7 @@ import UserModal from '../components/ImgComponent';
 
 import { useMemo } from 'react';
 
-import { Box, Link as ChakraLink, Heading, Grid } from '@chakra-ui/react';
+import { Box, Link as ChakraLink, Heading } from '@chakra-ui/react';
 
 const Frens: NextPage = () => {
   const router = useRouter()
@@ -57,8 +57,8 @@ const Frens: NextPage = () => {
       </Heading>
 
       <Box>
-        {data.map((user, i) => {
-
+        {data.slice(1,).map((user, i) => {
+          // slice to exclude caller from the spiral, need to place caller as a seperate entity.
           return (
             <Box
               position='absolute'

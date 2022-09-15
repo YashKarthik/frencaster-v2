@@ -11,12 +11,16 @@ Create your own [Farcaster](https://farcaster.xyz) interaction circle. *Inspired
 
 # v2
 - [x] Build a full-fledged frontend Next.js. And offload image rendering here.
-- [x] Use an outward spiral instead of multiple levels of circles.
+- [-] Use an outward spiral instead of multiple levels of circles. (alignment)
 - [x] Replace a static image gen via canvas with a dynamic animated thingy built via react
 - [x] Serverless using /api routes.
+- [-] Show user metadata
+  - [x] Username
+  - [x] Bio
+  - [-] Top cast (need to add link)
+  - [x] Followers
+  - [x] Open profile in fc
 - [ ] Allow users to customize stuff: bg, profile outline, size, num of spiral layers etc.
-- [ ] Integrate with farcasternews.xyz and others to show karma.
-- [ ] Hovering a profile should show who it is etc.
 - [ ] Mint as nft (on some layer2, probs optimism). Store image on Arweave/IPFS.
 
 - [ ] Consider other interactions in the calculation. Possible when v2 of farcaster launches, as currently likes, recast, etc are not protocol level features.
