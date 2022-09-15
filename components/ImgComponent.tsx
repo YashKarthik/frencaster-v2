@@ -20,7 +20,8 @@ const UserImage = ({avatarUrl}: {avatarUrl: string}) => {
       alt={'img'}
       maxW='full'
       borderRadius='full'
-      border='solid 2px purple.500'
+      border='solid 3px'
+      borderColor='purple.500'
     />
   );
 }
@@ -29,13 +30,25 @@ const UserModal = (props: INameFreq) => {
   return (
     <Popover trigger="hover">
       <PopoverTrigger>
-        <Box>
+        <Box maxW={100}>
           <UserImage avatarUrl={props.avatarUrl!}/>
         </Box>
       </PopoverTrigger>
-      <PopoverContent>
-        <PopoverHeader>{props.username}</PopoverHeader>
-        <PopoverBody><p>Descriptions</p></PopoverBody>
+      <PopoverContent
+        maxW={200}
+        border="solid 2px"
+        borderColor='black'
+        borderRadius='sm'
+      >
+        <PopoverHeader>
+          @{props.username}
+        </PopoverHeader>
+        <PopoverBody>
+          <p>Bio</p>
+          <p>Top cast</p>
+          <p>Karma</p>
+          {/* Need to add other stuff like karma, bio, top tweet etc*/}
+        </PopoverBody>
       </PopoverContent>
     </Popover>
   );

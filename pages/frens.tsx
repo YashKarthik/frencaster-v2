@@ -3,14 +3,36 @@ import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Link from 'next/link'
 import { INameFreq } from './api/[username]';
+import UserModal from '../components/ImgComponent';
 
-import { Box, Link as ChakraLink, Heading } from '@chakra-ui/react';
+import { useMemo } from 'react';
+
+import { Box, Link as ChakraLink, Heading, Grid } from '@chakra-ui/react';
 
 const Frens: NextPage = () => {
   const router = useRouter()
   const { body } = router.query
   const data: INameFreq[] = JSON.parse(body as string);
   console.log(data);
+
+  function calcCoords(n:number) {
+
+    let angle = 0;
+    let radii: number[][] = [];
+
+    for(let i=0; i < n;i++) {
+      let radius = Math.sqrt(i+1) * 80;
+      angle += 15 * Math.asin(8/radius);
+      let x = Math.cos(angle)*(radius)
+      let y = Math.sin(angle)*(radius)
+
+      radii.push([x, y])
+    }
+
+    return radii;
+  }
+
+  const radii = useMemo(() => calcCoords(data.length), [data]);
 
   return (
     <Box h='90vh'>
@@ -33,6 +55,26 @@ const Frens: NextPage = () => {
       >
         {data[0].username}'s frencircle
       </Heading>
+
+      <Box>
+        {data.map((user, i) => {
+
+          return (
+            <Box
+              position='absolute'
+              left={radii[i][0] + 650}
+              top={radii[i][1] + 350}
+            >
+              <UserModal
+                avatarUrl={user.avatarUrl}
+                username={user.username}
+                freq={user.freq}
+              />
+            </Box>
+          );
+        })}
+
+      </Box>
     </Box>
   );
 }

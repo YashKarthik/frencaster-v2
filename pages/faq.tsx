@@ -8,8 +8,6 @@ import { Box,
          Link as ChakraLink
 } from '@chakra-ui/react';
 
-import UserModal from '../components/ImgComponent';
-
 const FaqElement = ({heading, text}: any) => (
   <Box p='4' ml='20'>
     <Heading fontSize='xl' fontWeight='medium'>{heading}</Heading>
@@ -30,12 +28,6 @@ const Faq: NextPage = () => {
       <Link href="/">
         <ChakraLink pl='6' textColor='purple.600'>Home</ChakraLink>
       </Link>
-
-      <UserModal
-        avatarUrl='https://lh3.googleusercontent.com/W_MM3NN-i9OYxM3XPJjwpb5mkMLjJFZJjnEXsvrhiTwirSFhRjyAa3qTzV63ago6NkX9qeesi20hoK9fHdhiE-SqICH0vPcTm3Dl'
-        freq={0}
-        username='yashkarthik'
-      />
 
       <main>
 
