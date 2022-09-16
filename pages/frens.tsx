@@ -56,19 +56,35 @@ const Frens: NextPage = () => {
         {data[0].username}'s frencircle
       </Heading>
 
-      <Box>
+      <Box
+        width={{lg: '100%', base: '50%'}}
+        height='100%'
+        position='relative'
+      >
+        <Box
+          position='absolute'
+          left={radii[0][0] + 650}
+          top={radii[0][1] + 150}
+        >
+          <UserModal
+            avatarUrl={data[0].avatarUrl}
+            username={data[0].username}
+            freq={0}
+          />
+        </Box>
         {data.slice(1,).map((user, i) => {
           // slice to exclude caller from the spiral, need to place caller as a seperate entity.
+          // passing in `i` as freq to `UserModal` to make further prof pics smaller.
           return (
             <Box
               position='absolute'
               left={radii[i][0] + 650}
-              top={radii[i][1] + 350}
+              top={radii[i][1] + 300}
             >
               <UserModal
                 avatarUrl={user.avatarUrl}
                 username={user.username}
-                freq={user.freq}
+                freq={i+1}
               />
             </Box>
           );

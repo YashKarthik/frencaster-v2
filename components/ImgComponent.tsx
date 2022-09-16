@@ -7,25 +7,26 @@ import {
   Image,
   Box,
   Text,
-  Link as ChakraLink
+  Link as ChakraLink,
+  Divider
 } from '@chakra-ui/react'
 
 import { useEffect, useState } from 'react';
 import { INameFreq } from '../pages/api/[username]';
 import { fetchProfile, fetchTopCast } from '../utils/metadata';
 
-const UserImage = ({avatarUrl}: {avatarUrl: string}) => {
+const UserImage = ({avatarUrl, factor}: {avatarUrl: string, factor: number}) => {
   // using img cuz NextImage doesn't allow * domains, and I can't guess domains (not yet atleast)
+  const size = factor == 0 ? 140: 90 - (1.5 * factor);
   return (
     <Image
       src={avatarUrl}
-      width={100}
-      height={100}
+      boxSize={size + 'px'}
       alt={'img'}
-      maxW='full'
+      minW={size + 'px'}
       borderRadius='full'
       border='solid 3px'
-      borderColor='purple.500'
+      borderColor={factor == 0 ? 'yellow.400' : 'purple.500'}
     />
   );
 }
@@ -61,10 +62,10 @@ const UserModal = (props: INameFreq) => {
 
 
   return (
-    <Popover trigger="hover">
+    <Popover trigger={"hover"}>
       <PopoverTrigger>
         <Box maxW={100}>
-          <UserImage avatarUrl={props.avatarUrl!}/>
+          <UserImage avatarUrl={props.avatarUrl!} factor={props.freq} />
         </Box>
       </PopoverTrigger>
       <PopoverContent
@@ -79,10 +80,10 @@ const UserModal = (props: INameFreq) => {
             Followers: {metadata.numFollowers}
           </Box>
         </PopoverHeader>
-        <PopoverBody>
-          <Text p='1' borderBottom='dashed gray 1px'>{metadata.bio}</Text>
-
-          <Text p='1' borderBottom='dashed gray 1px'>
+        <PopoverBody p='0'>
+          <Text p='3' borderBottom='dashed gray 0px'>{metadata.bio}</Text>
+          <Divider />
+          <Text p='3' borderBottom='dashed gray 0px'>
             <Text fontWeight='bold'>
               Top Cast:
               {/* need to figure out how fc client does cast urls
@@ -98,9 +99,11 @@ const UserModal = (props: INameFreq) => {
             {metadata.topCastText}
           </Text>
 
+          <Divider />
+
           <ChakraLink
             textColor='purple.500'
-            pt='1'
+            p='3'
             href={`farcaster://profiles/${metadata.address}`}
           >
             View profile in Farcaster

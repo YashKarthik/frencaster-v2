@@ -11,7 +11,7 @@ Create your own [Farcaster](https://farcaster.xyz) interaction circle. *Inspired
 
 # v2
 - [x] Build a full-fledged frontend Next.js. And offload image rendering here.
-- [-] Use an outward spiral instead of multiple levels of circles. (alignment)
+- [x] Use an outward spiral instead of multiple levels of circles. (alignment)
 - [x] Replace a static image gen via canvas with a dynamic animated thingy built via react
 - [x] Serverless using /api routes.
 - [-] Show user metadata
@@ -21,9 +21,11 @@ Create your own [Farcaster](https://farcaster.xyz) interaction circle. *Inspired
   - [x] Followers
   - [x] Open profile in fc
 - [ ] Allow users to customize stuff: bg, profile outline, size, num of spiral layers etc.
+  - Need to convert the vars into state
+  -  And move state up the tree. `useContext()`.
 - [ ] Mint as nft (on some layer2, probs optimism). Store image on Arweave/IPFS.
 
 - [ ] Consider other interactions in the calculation. Possible when v2 of farcaster launches, as currently likes, recast, etc are not protocol level features.
 
 ## Resources
-- https://github.com/lfglabs/farcaster-indexer#farcaster-indexer for farcasternews karma.
+- https://www.youtube.com/watch?v=8ARpZ0zL48g - contracts on zksync.

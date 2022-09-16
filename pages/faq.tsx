@@ -1,11 +1,13 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Link from 'next/link'
+import NextLink from 'next/link'
 
-import { Box,
-         Heading,
-         Text,
-         Link as ChakraLink
+import {
+  Box,
+  Heading,
+  Text,
+  HStack,
+  Link as ChakraLink
 } from '@chakra-ui/react';
 
 const FaqElement = ({heading, text}: any) => (
@@ -17,7 +19,7 @@ const FaqElement = ({heading, text}: any) => (
 
 const Faq: NextPage = () => {
   return (
-    <Box h='90vh'>
+    <Box h='100vh' display='flex' flexDir='column' justifyContent='space-between'>
 
       <Head>
         <title>Frencircle</title>
@@ -25,14 +27,14 @@ const Faq: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Link href="/">
+      <NextLink href="/">
         <ChakraLink pl='6' textColor='purple.600'>Home</ChakraLink>
-      </Link>
+      </NextLink>
 
       <main>
 
         <Box >
-          <Heading pt='10' pb='20' textAlign='center' fontSize='4xl' _hover={{textColor:'purple.500'}}>
+          <Heading pb='20' textAlign='center' fontSize='4xl' _hover={{textColor:'purple.500'}}>
             Frequently Asked Questions
           </Heading>
 
@@ -65,6 +67,16 @@ const Faq: NextPage = () => {
 
         </Box>
       </main>
+
+      <HStack flexDir='row' justifyContent='space-evenly' textAlign='center' m='3'>
+        <ChakraLink color='purple.600' isExternal href="https://twitter.com/_yashkarthik">@_yashkarthik (TW)</ChakraLink>
+        <ChakraLink color='purple.600' href="farcaster://profiles/0x6eFe7a747E8d47E5fA2161Ff2591420830D618de">@yashkarthik (FC)</ChakraLink>
+        <ChakraLink color='purple.600' isExternal href="https://github.com/yashkarthik/frencircle-v2">Source </ChakraLink>
+        <ChakraLink color='purple.600' isExternal href="https://yashkarthik.xyz/archive/friend-caster">How it Works </ChakraLink>
+        <NextLink href='/faq' passHref>
+          <ChakraLink  color='purple.600'>FAQ </ChakraLink>
+        </NextLink>
+      </HStack>
     </Box>
   );
 }
