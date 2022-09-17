@@ -17,7 +17,7 @@ import { fetchProfile, fetchTopCast } from '../utils/metadata';
 
 const UserImage = ({avatarUrl, factor}: {avatarUrl: string, factor: number}) => {
   // using img cuz NextImage doesn't allow * domains, and I can't guess domains (not yet atleast)
-  const size = factor == 0 ? 140: 90 - (1.5 * factor);
+  const size = factor == 0 ? 120: 90 - (1.5 * factor);
   return (
     <Image
       src={avatarUrl}

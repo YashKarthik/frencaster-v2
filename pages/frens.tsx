@@ -7,7 +7,11 @@ import UserModal from '../components/ImgComponent';
 
 import { useMemo } from 'react';
 
-import { Box, Link as ChakraLink, Heading } from '@chakra-ui/react';
+import {
+  Box,
+  Link as ChakraLink,
+  Heading,
+} from '@chakra-ui/react';
 
 const Frens: NextPage = () => {
   const router = useRouter()
@@ -15,16 +19,25 @@ const Frens: NextPage = () => {
   const data: INameFreq[] = JSON.parse(body as string);
   console.log(data);
 
-  function calcCoords(n:number) {
+  function calcCoords(n: number) {
 
+    let factor = 2;
     let angle = 0;
     let radii: number[][] = [];
+    let prevX = 0;
+    let prevY = 0;
 
     for(let i=0; i < n;i++) {
-      let radius = Math.sqrt(i+1) * 80;
-      angle += 15 * Math.asin(8/radius);
-      let x = Math.cos(angle)*(radius)
-      let y = Math.sin(angle)*(radius)
+      let radius = Math.sqrt(i+1) * factor * 10;
+      angle += 15 * Math.asin(factor/radius);
+      let x = Math.cos(angle)*(radius) + 50
+      let y = Math.sin(angle)*(radius) + 50
+
+      //if (x < prevX) x = -x;
+      //if (y < prevY) y = -y;
+
+      //prevX = x;
+      //prevY = y;
 
       radii.push([x, y])
     }
@@ -35,7 +48,7 @@ const Frens: NextPage = () => {
   const radii = useMemo(() => calcCoords(data.length), [data]);
 
   return (
-    <Box h='90vh'>
+    <Box h='90vh' display='flex' flexDir='column'>
       <Head>
         <title>Frencircle</title>
         <meta name="description" content="Visualize your Farcaster interaction circle!" />
@@ -57,14 +70,19 @@ const Frens: NextPage = () => {
       </Heading>
 
       <Box
-        width={{lg: '100%', base: '50%'}}
-        height='100%'
+        id='wrap-div-for-spiral'
+        minW={350}
+        minH={350}
         position='relative'
+        alignSelf='center'
+        top='10%'
       >
+
         <Box
-          position='absolute'
-          left={radii[0][0] + 650}
-          top={radii[0][1] + 150}
+          position='relative'
+          justifyContent='center'
+          top='35%'
+          left='50%'
         >
           <UserModal
             avatarUrl={data[0].avatarUrl}
@@ -78,8 +96,8 @@ const Frens: NextPage = () => {
           return (
             <Box
               position='absolute'
-              left={radii[i][0] + 650}
-              top={radii[i][1] + 300}
+              left={(radii[i][0])+ '%'}
+              top={(radii[i][1]) + '%'}
             >
               <UserModal
                 avatarUrl={user.avatarUrl}
