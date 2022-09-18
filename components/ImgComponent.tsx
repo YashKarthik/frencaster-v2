@@ -11,22 +11,32 @@ import {
   Divider
 } from '@chakra-ui/react'
 
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { INameFreq } from '../pages/api/[username]';
 import { fetchProfile, fetchTopCast } from '../utils/metadata';
+import { SpiralContext } from '../pages/frens';
 
 const UserImage = ({avatarUrl, factor}: {avatarUrl: string, factor: number}) => {
+  const {
+    fgColor,
+    bgColor,
+    profileSize,
+    mainProfileSize,
+    profileColor,
+    mainProfileColor,
+  } = useContext(SpiralContext);
+
+  const size = factor == 0 ? mainProfileSize : profileSize - (1.5 * factor);
   // using img cuz NextImage doesn't allow * domains, and I can't guess domains (not yet atleast)
-  const size = factor == 0 ? 120: 90 - (1.5 * factor);
   return (
     <Image
       src={avatarUrl}
       boxSize={size + 'px'}
-      alt={'img'}
+      alt={'profile image'}
       minW={size + 'px'}
       borderRadius='full'
       border='solid 3px'
-      borderColor={factor == 0 ? 'yellow.400' : 'purple.500'}
+      borderColor={factor == 0 ? mainProfileColor : profileColor}
     />
   );
 }
@@ -42,6 +52,11 @@ interface IMetadata {
 const UserModal = (props: INameFreq) => {
 
   const [metadata, setMetadata] = useState<IMetadata>({bio: '', address: '', numFollowers: 0, topCastText: '', topCastMerkleRoot: ''});
+
+  const {
+    fgColor,
+    bgColor,
+  } = useContext(SpiralContext);
 
   useEffect(() => {
     const getBio = async () => {
@@ -69,9 +84,11 @@ const UserModal = (props: INameFreq) => {
         </Box>
       </PopoverTrigger>
       <PopoverContent
+        textColor={fgColor}
+        bgColor={bgColor}
         minW={200}
         border="solid 2px"
-        borderColor='black'
+        borderColor={fgColor}
         borderRadius='sm'
       >
         <PopoverHeader fontWeight='bold'>
