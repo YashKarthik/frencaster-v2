@@ -1,63 +1,73 @@
 import { SpiralContext } from '../pages/frens';
 
 import {
+  RadiusSlider,
+  AngleSlider,
+  ProfileSlider,
+  MainProfileSlider,
+  TextColorPicker,
+  BgColorPicker,
+  MainRingColorPicker,
+  ProfileRingColorPicker,
+} from './SettingsMenuComponents';
+
+import {
   Button,
-  Box,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
-  MenuItemOption,
   MenuGroup,
-  MenuOptionGroup,
   MenuDivider,
-  Slider,
-  SliderTrack,
-  SliderFilledTrack,
-  SliderThumb,
-  SliderMark,
 } from '@chakra-ui/react'
 
 import { useContext } from 'react';
 
 export default function SettingsMenu() {
 
-  const { fgColor, bgColor } = useContext(SpiralContext);
+  const { fgColor, bgColor, profileColor } = useContext(SpiralContext)!;
 
   return (
     <Menu>
       <MenuButton
         as={Button}
-        colorScheme='purple'
+        textColor={profileColor}
+        borderColor={profileColor}
         variant='outline'
         borderRadius='sm'
+        _focus={{bgColor: bgColor}}
+        _hover={{bgColor: bgColor}}
       >
         Settings
       </MenuButton>
 
       <MenuList
-        borderColor='purple.500'
-        borderRadius='sm'
+        maxH='300'
+        overflowY='hidden'
         bg={bgColor}
         textColor={fgColor}
+        borderRadius='sm'
+        borderColor={profileColor}
       >
         <MenuGroup title='Spiral'>
-          <MenuItem>Radius Factor</MenuItem>
-          <MenuItem>Angle Factor</MenuItem>
-        </MenuGroup>
-
-        <MenuDivider />
-
-        <MenuGroup title='Colors'>
-          <MenuItem>Main Profile Color</MenuItem>
-          <MenuItem>Profile Color</MenuItem>
+          <MenuItem closeOnSelect={false} _hover={{bgColor: 'rgba(0,0,0,0)'}} _focus={{bgColor: 'rgba(0,0,0,0)'}}><RadiusSlider /></MenuItem>
+          <MenuItem closeOnSelect={false} _hover={{bgColor: 'inherit'}}><AngleSlider /></MenuItem>
         </MenuGroup>
 
         <MenuDivider />
 
         <MenuGroup title='Profile'>
-          <MenuItem>Main Profile Size</MenuItem>
-          <MenuItem>Profile Size</MenuItem>
+          <MenuItem closeOnSelect={false} _hover={{bgColor: 'inherit'}}><ProfileSlider /></MenuItem>
+          <MenuItem closeOnSelect={false} _hover={{bgColor: 'inherit'}}><MainProfileSlider /></MenuItem>
+        </MenuGroup>
+
+        <MenuDivider />
+
+        <MenuGroup title='Colors'>
+          <MenuItem closeOnSelect={false} _hover={{bgColor: 'inherit'}}><TextColorPicker /></MenuItem>
+          <MenuItem closeOnSelect={false} _hover={{bgColor: 'inherit'}}><BgColorPicker /></MenuItem>
+          <MenuItem closeOnSelect={false} _hover={{bgColor: 'inherit'}}><MainRingColorPicker /></MenuItem>
+          <MenuItem closeOnSelect={false} _hover={{bgColor: 'inherit'}}><ProfileRingColorPicker /></MenuItem>
         </MenuGroup>
       </MenuList>
     </Menu>

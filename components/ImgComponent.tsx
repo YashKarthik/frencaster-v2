@@ -24,7 +24,7 @@ const UserImage = ({avatarUrl, factor}: {avatarUrl: string, factor: number}) => 
     mainProfileSize,
     profileColor,
     mainProfileColor,
-  } = useContext(SpiralContext);
+  } = useContext(SpiralContext)!;
 
   const size = factor == 0 ? mainProfileSize : profileSize - (1.5 * factor);
   // using img cuz NextImage doesn't allow * domains, and I can't guess domains (not yet atleast)
@@ -56,7 +56,7 @@ const UserModal = (props: INameFreq) => {
   const {
     fgColor,
     bgColor,
-  } = useContext(SpiralContext);
+  } = useContext(SpiralContext)!;
 
   useEffect(() => {
     const getBio = async () => {

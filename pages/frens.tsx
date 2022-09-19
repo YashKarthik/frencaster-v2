@@ -6,7 +6,7 @@ import { INameFreq } from './api/[username]';
 import UserModal from '../components/ImgComponent';
 import SettingsMenu from '../components/SettingsMenu';
 
-import { useMemo, useState, createContext } from 'react';
+import { useMemo, useState, createContext, Dispatch, SetStateAction } from 'react';
 
 import {
   Box,
@@ -14,16 +14,27 @@ import {
   Heading,
 } from '@chakra-ui/react';
 
-export const SpiralContext = createContext({
-  bgColor: 'white',
-  fgColor: 'black',
-  spiralFactor: 2,
-  angleFactor: 15,
-  profileSize: 90,
-  mainProfileSize: 120,
-  profileColor: 'purple.500',
-  mainProfileColor: 'yellow.400',
-});
+interface ISpiralContext {
+  bgColor             :string;
+  fgColor             :string;
+  spiralFactor        :number;
+  angleFactor         :number;
+  profileColor        :string;
+  mainProfileColor    :string;
+  profileSize         :number;
+  mainProfileSize     :number;
+  setBgColor          :Dispatch<SetStateAction<string>>;
+  setFgColor          :Dispatch<SetStateAction<string>>;
+  setSpiralFactor     :Dispatch<SetStateAction<number>>;
+  setAngleFactor      :Dispatch<SetStateAction<number>>;
+  setProfileColor     :Dispatch<SetStateAction<string>>;
+  setMainProfileColor :Dispatch<SetStateAction<string>>;
+  setProfileSize      :Dispatch<SetStateAction<number>>;
+  setMainProfileSize  :Dispatch<SetStateAction<number>>;
+
+}
+
+export const SpiralContext = createContext<ISpiralContext | null>(null);
 
 const Frens: NextPage = () => {
   const router = useRouter()
@@ -42,13 +53,13 @@ const Frens: NextPage = () => {
 
   function calcCoords(n: number) {
 
-    let factor = 2;
+    let factor = spiralFactor;
     let angle = 0;
     let radii: number[][] = [];
 
     for(let i=0; i < n;i++) {
       let radius = Math.sqrt(i+1) * factor * 10;
-      angle += 15 * Math.asin(factor/radius);
+      angle += angleFactor * Math.asin(factor/radius);
       let x = Math.cos(angle)*(radius) + 50
       let y = Math.sin(angle)*(radius) + 50
 
@@ -70,8 +81,16 @@ const Frens: NextPage = () => {
       mainProfileColor,
       profileSize,
       mainProfileSize,
+      setBgColor,
+      setFgColor,
+      setSpiralFactor,
+      setAngleFactor,
+      setProfileColor,
+      setMainProfileColor,
+      setProfileSize,
+      setMainProfileSize,
     }}>
-      <Box h='90vh' display='flex' flexDir='column'>
+      <Box h='130vh' display='flex' flexDir='column' bgColor={bgColor}>
         <Head>
           <title>Frencircle</title>
           <meta name="description" content="Visualize your Farcaster interaction circle!" />
@@ -79,7 +98,7 @@ const Frens: NextPage = () => {
         </Head>
 
         <Link href="/">
-          <ChakraLink pl='6' textColor='purple.600'>Home</ChakraLink>
+          <ChakraLink pl='6' textColor={profileColor}>Home</ChakraLink>
         </Link>
 
         <Box p='4'>
@@ -87,11 +106,11 @@ const Frens: NextPage = () => {
         </Box>
 
         <Heading
-          pt='5' pb='20'
+          pb='20'
           textAlign='center'
           fontSize='4xl'
           fontWeight='bold'
-          _hover={{textColor: "purple.600"}}
+          textColor={fgColor}
         >
           {data[0].username}'s frencircle
         </Heading>
