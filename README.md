@@ -7,7 +7,7 @@ Create your own [Farcaster](https://farcaster.xyz) interaction circle. *Inspired
 
 #### What counts as interaction?
 - Currently only replies are considered.
-- I'm actively working to include other stuff (likes, recasts etc)
+- Other interactions (recasts, likes, watchings) will be considered when Farcaster migrates to v2 contracts as these features are not yet implemented at the protocol level.
 
 # v2
 - [x] Build a full-fledged frontend Next.js. And offload image rendering here.
@@ -29,4 +29,5 @@ Create your own [Farcaster](https://farcaster.xyz) interaction circle. *Inspired
 - [ ] Consider other interactions in the calculation. Possible when v2 of farcaster launches, as currently likes, recast, etc are not protocol level features.
 
 ## Resources
-- https://www.youtube.com/watch?v=8ARpZ0zL48g - contracts on zksync.
+- https://stackoverflow.com/questions/47129173/how-to-convert-uint-to-string-in-solidity
+- proxy contract stuff

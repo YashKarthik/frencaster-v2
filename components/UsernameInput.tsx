@@ -43,7 +43,7 @@ export default function UsernameInput() {
           border="solid black 1px"
           borderRadius='sm'
         >
-          <InputLeftAddon children='@' borderRadius='sm' bg='white'/>
+          <InputLeftAddon borderRadius='sm' bg='white'>@</InputLeftAddon>
           <Input
             name='username'
             type='text'

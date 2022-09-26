@@ -69,7 +69,7 @@ const Frens: NextPage = () => {
     return radii;
   }
 
-  const radii = useMemo(() => calcCoords(data.length), [data]);
+  const radii = useMemo(() => calcCoords(data.length), [data.length]);
 
   return (
     <SpiralContext.Provider value={{
@@ -112,7 +112,7 @@ const Frens: NextPage = () => {
           fontWeight='bold'
           textColor={fgColor}
         >
-          {data[0].username}'s frencircle
+          {data[0].username}&apos; frencircle
         </Heading>
 
         <Box
@@ -141,6 +141,7 @@ const Frens: NextPage = () => {
             // passing in `i` as freq to `UserModal` to make further prof pics smaller.
             return (
               <Box
+                key={i}
                 position='absolute'
                 left={(radii[i][0])+ '%'}
                 top={(radii[i][1]) + '%'}
