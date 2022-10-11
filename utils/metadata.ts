@@ -1,5 +1,13 @@
+import got from "got";
+import { utils, Contract } from 'ethers';
+
 import { createClient } from "@supabase/supabase-js";
 import { count } from "console";
+
+
+import { IUser } from "../interfaces/profile";
+import { ICast } from "../interfaces/casts";
+import { fnameToAddress } from "./utils"
 
 const supabase = createClient(
   "https://kpwbglpxjuhiqtgtvenz.supabase.co",
@@ -31,12 +39,12 @@ export const fetchProfile = async (username:string): Promise<IProfile> => {
   };
 }
 
-interface ICast {
-  text:       string;
-  merkleRoot: string;
-}
+//interface ICast {
+//  text:       string;
+//  merkleRoot: string;
+//}
 
-export const fetchTopCast = async (username:string): Promise<ICast> => {
+export const fetchTopCast = async (username:string): Promise<any> => {
   const { data, error } = await supabase
     .from('account_view')
     .select('activity_view (text, merkle_root)')
@@ -51,4 +59,24 @@ export const fetchTopCast = async (username:string): Promise<ICast> => {
     text: data[0].activity_view[0].text,
     merkleRoot: data[0].activity_view[0].merkleRoot,
   }
+}
+
+/**
+* @return Returns a list of users: IUser that fname has replied to.
+* */
+export const getRepliedPeople = async (fname: string, nameProxy: Contract): Promise<(IUser | undefined)[]> => {
+  const address = await fnameToAddress(fname, nameProxy);
+  const res: {"result": {"casts": ICast[]}} = await got(`https://api.farcaster.xyz/v1/profiles/${address}/casts`).json();
+  const casts = res.result.casts;
+
+  const users: (IUser | undefined)[] = await Promise.all(casts.map(async cast => {
+    if (cast.body.data.replyParentMerkleRoot) {
+      const address = cast.meta.replyParentUsername.address;
+      const profile: {"result": {"user": IUser}} = await got(`https://api.farcaster.xyz/v1/profiles/${address}`).json();
+
+      return profile.result.user;
+    }
+  }))
+
+  return users;
 }

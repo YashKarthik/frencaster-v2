@@ -21,12 +21,13 @@ const submitUname = async (event: FormEvent<HTMLFormElement>, router: NextRouter
   console.log("Creating your interaction circle");
 
   const res = await fetch(`/api/${name}`);
-  const body  = await res.json()
+  const body  = await res.json();
+  console.log(body);
 
-  router.push({
-    pathname: '/frens',
-    query: { body: body }
-  }, '/frens', );
+  //router.push({
+  //  pathname: '/frens',
+  //  query: { body: body }
+  //}, '/frens', );
 };
 
 export default function UsernameInput() {
