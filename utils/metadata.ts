@@ -2,10 +2,10 @@ import got from "got";
 import { utils, Contract } from 'ethers';
 
 import { createClient } from "@supabase/supabase-js";
-import { count } from "console";
+import { count, profileEnd } from "console";
 
 
-import { IUser } from "../interfaces/profile";
+import { IUser, IOverview } from "../interfaces/profile";
 import { ICast } from "../interfaces/casts";
 import { fnameToAddress } from "./utils"
 
@@ -30,7 +30,7 @@ export const fetchProfile = async (username:string): Promise<IProfile> => {
     throw error;
   }
 
-  console.log(data)
+  //console.log(data)
 
   return {
     bio           :data![0].bio!,
@@ -64,17 +64,23 @@ export const fetchTopCast = async (username:string): Promise<any> => {
 /**
 * @return Returns a list of users: IUser that fname has replied to.
 * */
-export const getRepliedPeople = async (fname: string, nameProxy: Contract): Promise<(IUser | undefined)[]> => {
+export const getRepliedPeople = async (fname: string, nameProxy: Contract): Promise<(IOverview | undefined)[]> => {
   const address = await fnameToAddress(fname, nameProxy);
   const res: {"result": {"casts": ICast[]}} = await got(`https://api.farcaster.xyz/v1/profiles/${address}/casts`).json();
   const casts = res.result.casts;
 
-  const users: (IUser | undefined)[] = await Promise.all(casts.map(async cast => {
+  const users: (IOverview | undefined)[] = await Promise.all(casts.map(async cast => {
     if (cast.body.data.replyParentMerkleRoot) {
       const address = cast.meta.replyParentUsername.address;
-      const profile: {"result": {"user": IUser}} = await got(`https://api.farcaster.xyz/v1/profiles/${address}`).json();
+      const profileRes: {"result": {"user": IUser}} = await got(`https://api.farcaster.xyz/v1/profiles/${address}`).json();
+      const castsRes: {"result": {"casts": ICast[]}} = await got(`https://api.farcaster.xyz/v1/profiles/${address}/casts`).json();
+      const profile = profileRes.result.user;
+      const latestCast = castsRes.result.casts[0];
 
-      return profile.result.user;
+      return {
+        user:profile,
+        latestCast: latestCast
+      };
     }
   }))
 

@@ -12,9 +12,8 @@ import {
 } from '@chakra-ui/react'
 
 import { useContext, useEffect, useState } from 'react';
-import { INameFreq } from '../pages/api/[username]';
-import { fetchProfile, fetchTopCast } from '../utils/metadata';
-import { SpiralContext } from '../pages/frens';
+import { SpiralContext } from '../pages/[username]';
+import { IUserComponent } from '../interfaces/profile';
 
 const UserImage = ({avatarUrl, factor}: {avatarUrl: string, factor: number}) => {
   const {
@@ -27,7 +26,7 @@ const UserImage = ({avatarUrl, factor}: {avatarUrl: string, factor: number}) => 
   } = useContext(SpiralContext)!;
 
   const size = factor == 0 ? mainProfileSize : profileSize - (1.5 * factor);
-  // using img cuz NextImage doesn't allow * domains, and I can't guess domains (not yet atleast)
+  // using normal img cuz NextImage doesn't allow * domains, and fc allows domains for pfp.
   return (
     <Image
       src={avatarUrl}
@@ -41,46 +40,18 @@ const UserImage = ({avatarUrl, factor}: {avatarUrl: string, factor: number}) => 
   );
 }
 
-interface IMetadata {
-  bio           :string;
-  address       :string;
-  numFollowers  :number;
-  topCastText   :string;
-  topCastMerkleRoot   :string;
-}
-
-const UserModal = (props: INameFreq) => {
-
-  const [metadata, setMetadata] = useState<IMetadata>({bio: '', address: '', numFollowers: 0, topCastText: '', topCastMerkleRoot: ''});
+const UserModal = (props: IUserComponent) => {
 
   const {
     fgColor,
     bgColor,
   } = useContext(SpiralContext)!;
 
-  useEffect(() => {
-    const getBio = async () => {
-      const { bio, address, numFollowers } = await fetchProfile(props.username);
-      const topCast = await fetchTopCast(props.username);
-
-      setMetadata({
-        bio: bio,
-        address: address,
-        numFollowers: numFollowers,
-        topCastText: topCast.text,
-        topCastMerkleRoot: topCast.merkleRoot
-      });
-    }
-
-    getBio();
-  }, [props]);
-
-
   return (
     <Popover trigger={"hover"}>
       <PopoverTrigger>
         <Box maxW={100}>
-          <UserImage avatarUrl={props.avatarUrl!} factor={props.freq} />
+          <UserImage avatarUrl={props.data.user.avatar.url} factor={props.count} />
         </Box>
       </PopoverTrigger>
       <PopoverContent
@@ -92,28 +63,26 @@ const UserModal = (props: INameFreq) => {
         borderRadius='sm'
       >
         <PopoverHeader fontWeight='bold'>
-          @{props.username}
+          @{props.data.user.username}
           <Box fontWeight="light">
-            Followers: {metadata.numFollowers}
+            Followers: {props.data.user.followerCount}
           </Box>
         </PopoverHeader>
         <PopoverBody p='0'>
-          <Text p='3' borderBottom='dashed gray 0px'>{metadata.bio}</Text>
+          <Text p='3' borderBottom='dashed gray 0px'>{props.data.user.profile.bio.text}</Text>
           <Divider />
           <Text p='3' borderBottom='dashed gray 0px'>
             <Text fontWeight='bold'>
-              Top Cast:
-              {/* need to figure out how fc client does cast urls
+              Latest Cast:
               <ChakraLink
                 fontWeight='light'
                 textColor='purple.500'
-                pt='1' href={`farcaster://casts/${metadata.topCastMerkleRoot}/${metadata.topCastMerkleRoot}`}
+                pt='1' href={`farcaster://casts/${props.data.latestCast.merkleRoot}/${props.data.latestCast.merkleRoot}`}
               >
                 View in Farcaster
               </ChakraLink>
-              */}
             </Text>
-            {metadata.topCastText}
+            {props.data.latestCast.body.data.text}
           </Text>
 
           <Divider />
@@ -121,7 +90,7 @@ const UserModal = (props: INameFreq) => {
           <ChakraLink
             textColor='purple.500'
             p='3'
-            href={`farcaster://profiles/${metadata.address}`}
+            href={`farcaster://profiles/${props.data.user.address}`}
           >
             View profile in Farcaster
           </ChakraLink>
@@ -132,5 +101,3 @@ const UserModal = (props: INameFreq) => {
 }
 
 export default UserModal;
-
-// farcaster://profiles/0x6eFe7a747E8d47E5fA2161Ff2591420830D618de/posts

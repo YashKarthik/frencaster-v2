@@ -11,7 +11,7 @@ import { ChromePicker } from 'react-color'
 
 
 import { useContext } from 'react';
-import { SpiralContext } from '../pages/frens';
+import { SpiralContext } from '../pages/[username]';
 
 export const RadiusSlider = () => {
 

@@ -1,12 +1,22 @@
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
+
 import Head from 'next/head'
 import Link from 'next/link'
-import { INameFreq } from './api/[username]';
+
+import { IUserComponent } from '../interfaces/profile';
+
 import UserModal from '../components/ImgComponent';
 import SettingsMenu from '../components/SettingsMenu';
 
-import { useMemo, useState, createContext, Dispatch, SetStateAction } from 'react';
+import { 
+  Dispatch,
+  useMemo,
+  useState,
+  createContext,
+  SetStateAction,
+  useEffect
+} from 'react';
 
 import {
   Box,
@@ -38,9 +48,24 @@ export const SpiralContext = createContext<ISpiralContext | null>(null);
 
 const Frens: NextPage = () => {
   const router = useRouter()
-  const { body } = router.query
-  const data: INameFreq[] = JSON.parse(body as string);
-  console.log(data);
+  const { username } = router.query
+
+  //console.log('From frens.tsx',body);
+  //const allData: IUserComponent[] = JSON.parse(body as string);
+  //console.log(allData);
+  const [ allData, setAllData ] = useState<IUserComponent[]>();
+
+  useEffect(() => {
+    const getData = async () => {
+      const res = await fetch(`/api/${username}`);
+      const body = await res.json();
+      console.log('From useEffect in [username]',body);
+
+      setAllData(body);
+    }
+
+    getData();
+  }, []);
 
   const [ bgColor           , setBgColor          ] = useState('white');
   const [ fgColor           , setFgColor          ] = useState('black');
@@ -69,8 +94,13 @@ const Frens: NextPage = () => {
     return radii;
   }
 
-  const radii = useMemo(() => calcCoords(data.length), [data.length]);
+  let radii: number[][];
 
+  if (allData) {
+    radii = useMemo(() => calcCoords(allData.length), []);
+  } else {
+    useMemo(() => console.log('testing usememo'), [])
+  }
   return (
     <SpiralContext.Provider value={{
       bgColor,
@@ -112,9 +142,10 @@ const Frens: NextPage = () => {
           fontWeight='bold'
           textColor={fgColor}
         >
-          {data[0].username}&apos; frencircle
+        {username}&apos; frencircle
         </Heading>
 
+        {allData &&
         <Box
           id='wrap-div-for-spiral'
           minW={350}
@@ -131,12 +162,11 @@ const Frens: NextPage = () => {
             left='50%'
           >
             <UserModal
-              avatarUrl={data[0].avatarUrl}
-              username={data[0].username}
-              freq={0}
+              data={allData[0].data}
+              count={allData[0].count}
             />
           </Box>
-          {data.slice(1,).map((user, i) => {
+          {allData.slice(1,).map((u, i) => {
             // slice to exclude caller from the spiral, need to place caller as a seperate entity.
             // passing in `i` as freq to `UserModal` to make further prof pics smaller.
             return (
@@ -146,20 +176,18 @@ const Frens: NextPage = () => {
                 left={(radii[i][0])+ '%'}
                 top={(radii[i][1]) + '%'}
               >
-                <UserModal
-                  avatarUrl={user.avatarUrl}
-                  username={user.username}
-                  freq={i+1}
-                />
+              <UserModal
+                data={u.data}
+                count={u.count}
+              />
               </Box>
             );
           })}
-
         </Box>
+        }
       </Box>
     </SpiralContext.Provider>
   );
 }
-
 
 export default Frens;

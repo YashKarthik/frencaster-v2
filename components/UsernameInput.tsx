@@ -3,7 +3,7 @@
  */
 
 import { useRouter, NextRouter } from 'next/router';
-import { FormEvent, useState } from 'react';
+import { FormEvent, MouseEvent, useState } from 'react';
 
 import {
   Input,
@@ -17,17 +17,23 @@ const submitUname = async (event: FormEvent<HTMLFormElement>, router: NextRouter
 
   event.preventDefault();
   const name = event.currentTarget!.username.value;
+
   console.log(name);
   console.log("Creating your interaction circle");
 
-  const res = await fetch(`/api/${name}`);
-  const body  = await res.json();
-  console.log(body);
+  //const res = await fetch(`/api/${name}`);
+  //const body  = await res.json();
+  //// logs to browser console
+  //console.log('From UserInput.tsx', body);
 
   //router.push({
-  //  pathname: '/frens',
+  //  pathname: `/frens`,
   //  query: { body: body }
   //}, '/frens', );
+
+  router.push({
+    pathname: `/${name}`,
+  });
 };
 
 export default function UsernameInput() {
@@ -60,6 +66,7 @@ export default function UsernameInput() {
           bg='white'
           p='1' mt='3'
           fontSize='lg'
+          type="submit"
           _hover={{
             borderColor: 'purple.600',
             textColor: 'purple.600'

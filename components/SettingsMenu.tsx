@@ -1,4 +1,4 @@
-import { SpiralContext } from '../pages/frens';
+import { SpiralContext } from '../pages/[username]';
 
 import {
   RadiusSlider,
