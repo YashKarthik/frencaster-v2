@@ -1,12 +1,18 @@
-import type { NextPage } from 'next'
-import { useRouter } from 'next/router'
+import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 
-import Head from 'next/head'
-import Link from 'next/link'
+import Head from 'next/head';
+import Link from 'next/link';
+import dynamic from 'next/dynamic';
 
 import { IUserComponent } from '../interfaces/profile';
+import { testData } from '../test/initProfileData';
 
-import UserModal from '../components/ImgComponent';
+const UserModal = dynamic(() => import("../components/ImgComponent"), {
+  ssr: false,
+});
+
+//import UserModal from '../components/ImgComponent';
 import SettingsMenu from '../components/SettingsMenu';
 
 import { 
@@ -47,25 +53,26 @@ interface ISpiralContext {
 export const SpiralContext = createContext<ISpiralContext | null>(null);
 
 const Frens: NextPage = () => {
-  const router = useRouter()
-  const { username } = router.query
+  const router = useRouter();
+  const { username } = router.query;
 
   //console.log('From frens.tsx',body);
   //const allData: IUserComponent[] = JSON.parse(body as string);
   //console.log(allData);
-  const [ allData, setAllData ] = useState<IUserComponent[]>();
+  const [ allData, setAllData ] = useState<IUserComponent[]>(testData);
 
   useEffect(() => {
-    const getData = async () => {
+    const getData = async (username: string) => {
       const res = await fetch(`/api/${username}`);
       const body = await res.json();
-      console.log('From useEffect in [username]',body);
 
-      setAllData(body);
+      setAllData(body.result);
+      console.log('allData in useEffect', allData);
+      console.log('body in useEffect', body.result);
     }
 
-    getData();
-  }, []);
+    router.isReady && getData(username as string);
+  }, [router.isReady]);
 
   const [ bgColor           , setBgColor          ] = useState('white');
   const [ fgColor           , setFgColor          ] = useState('black');
@@ -97,9 +104,10 @@ const Frens: NextPage = () => {
   let radii: number[][];
 
   if (allData) {
-    radii = useMemo(() => calcCoords(allData.length), []);
+    radii = useMemo(() => calcCoords(allData.length), [allData, spiralFactor, angleFactor]);
+    console.log('useMemo for radii ran', radii);
   } else {
-    useMemo(() => console.log('testing usememo'), [])
+    useMemo(() => console.log('From useMemo: all data not yet fetched.'), [])
   }
   return (
     <SpiralContext.Provider value={{
@@ -142,7 +150,7 @@ const Frens: NextPage = () => {
           fontWeight='bold'
           textColor={fgColor}
         >
-        {username}&apos; frencircle
+          {username}&apos; frencircle
         </Heading>
 
         {allData &&
