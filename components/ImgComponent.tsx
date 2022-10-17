@@ -74,15 +74,16 @@ const UserModal = (props: IUserComponent) => {
           <Text p='3' borderBottom='dashed gray 0px'>
             <Text fontWeight='bold'>
               Latest Cast:
-              <ChakraLink
-                fontWeight='light'
-                textColor='purple.500'
-                pt='1' href={`farcaster://casts/${props.data.latestCast.merkleRoot}/${props.data.latestCast.merkleRoot}`}
-              >
-                View in Farcaster
-              </ChakraLink>
             </Text>
             {props.data.latestCast.body.data.text}
+            <br/>
+            <ChakraLink
+              fontWeight='light'
+              textColor='purple.500'
+              pt='1' href={`farcaster://casts/${props.data.latestCast.merkleRoot}/${props.data.latestCast.merkleRoot}`}
+            >
+              View cast in Farcaster →
+            </ChakraLink>
           </Text>
 
           <Divider />
@@ -92,7 +93,7 @@ const UserModal = (props: IUserComponent) => {
             p='3'
             href={`farcaster://profiles/${props.data.user.address}`}
           >
-            View profile in Farcaster
+            View profile in Farcaster →
           </ChakraLink>
         </PopoverBody>
       </PopoverContent>

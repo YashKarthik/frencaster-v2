@@ -8,6 +8,8 @@ import dynamic from 'next/dynamic';
 import { IUserComponent } from '../interfaces/profile';
 import { testData } from '../test/initProfileData';
 
+import { toSvg } from 'html-to-image';
+
 const UserModal = dynamic(() => import("../components/ImgComponent"), {
   ssr: false,
 });
@@ -28,6 +30,7 @@ import {
   Box,
   Link as ChakraLink,
   Heading,
+  Button,
 } from '@chakra-ui/react';
 
 interface ISpiralContext {
@@ -73,6 +76,17 @@ const Frens: NextPage = () => {
 
     router.isReady && getData(username as string);
   }, [router.isReady]);
+
+  function handleClick():any {
+    const node = document.getElementById('testing-html-to-image');
+    toSvg(node!)
+        .then(dataUrl => {
+                const img = new Image();
+                img.src = dataUrl;
+                document.body.appendChild(img);
+                })
+        .catch(err => console.log(err));
+  }
 
   const [ bgColor           , setBgColor          ] = useState('white');
   const [ fgColor           , setFgColor          ] = useState('black');
@@ -128,7 +142,7 @@ const Frens: NextPage = () => {
       setProfileSize,
       setMainProfileSize,
     }}>
-      <Box h='130vh' display='flex' flexDir='column' bgColor={bgColor}>
+      <Box h='130vh' display='flex' flexDir='column' bgColor={bgColor} id='testing-html-to-image'>
         <Head>
           <title>Frencircle</title>
           <meta name="description" content="Visualize your Farcaster interaction circle!" />
@@ -141,6 +155,19 @@ const Frens: NextPage = () => {
 
         <Box p='4'>
           <SettingsMenu />
+          <br />
+          <Button
+            my={1}
+            textColor={profileColor}
+            borderColor={profileColor}
+            variant='outline'
+            borderRadius='sm'
+            _focus={{bgColor: bgColor}}
+            _hover={{bgColor: bgColor, borderRadius:10}}
+            onClick={handleClick}
+          >
+              Generate Image
+          </Button>
         </Box>
 
         <Heading

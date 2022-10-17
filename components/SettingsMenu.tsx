@@ -36,7 +36,7 @@ export default function SettingsMenu() {
         variant='outline'
         borderRadius='sm'
         _focus={{bgColor: bgColor}}
-        _hover={{bgColor: bgColor}}
+        _hover={{bgColor: bgColor, borderRadius:10}}
       >
         Settings
       </MenuButton>
