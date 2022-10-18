@@ -6,7 +6,7 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 
 import { IUserComponent } from '../interfaces/profile';
-import { testData } from '../test/initProfileData';
+import { testData } from '../sample_data/initProfileData';
 
 import { toSvg } from 'html-to-image';
 
